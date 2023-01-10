@@ -36,20 +36,14 @@ main(){
             fi
 
             chown -R www-data:www-data "$moodledir"/"$plugintype"
-
-            # Install the Plugin
-            err=$(sudo -u www-data php "$moodledir"/admin/cli/upgrade.php --non-interactive --lang=en 2>&1)
-            if [ $? ]; then
-                echo "Error installing $name"
-                echo "$err"
-                rm "$plugindir"/"$name"
-                pluginname=$(echo "$err" | grep -oP '(?<=failed for ).*' | cut -d'_' -f 2-)
-                fullpath=$moodledir/$plugintype/$pluginname
-                rm -rf "${fullpath:?}"
-            fi else
-                echo "Successfully installed $name"
         fi
     done
+
+    err=$(sudo -u www-data php "$moodledir"/admin/cli/upgrade.php --non-interactive --lang=en 2>&1)
+    if [ $? ]; then
+         echo "Error installing $name"
+        echo "$err"
+    fi
 
 }
 
