@@ -41,7 +41,6 @@ main(){
 
     err=$(sudo -u www-data php "$moodledir"/admin/cli/upgrade.php --non-interactive --lang=en 2>&1)
     if [ $? ]; then
-         echo "Error installing $name"
         echo "$err"
     fi
 
