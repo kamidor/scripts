@@ -31,6 +31,18 @@ main(){
             if [ $? -ne 0 ]; then
                 echo "Error unzipping $name"
                 echo "$err"
+                rm "$plugindir"/"$name"
+                exit 1
+            fi
+
+            chown -R www-data:www-data "$moodledir"/"$plugintype"
+
+            # Install the Plugin
+            err=$(sudo -u www-data php "$moodledir"/admin/cli/upgrade.php --non-interactive 2>&1)
+            if [ $? -ne 0 ]; then
+                echo "Error installing $name"
+                echo "$err"
+                rm "$plugindir"/"$name"
                 exit 1
             fi
         fi
