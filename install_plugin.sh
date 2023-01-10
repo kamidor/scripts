@@ -51,7 +51,7 @@ main(){
             fi
         fi
     done
-    [ -n "$dep_check" ] || {
+    [ "$dep_check" -ne 0 ] || {
         echo "$dep_check"
         echo "Dependencies check failed. Trying to run the script again, maybe dependencies are installed now."
         $0 "$moodledir" $runs
