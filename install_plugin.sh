@@ -21,19 +21,23 @@ main(){
                 echo "$err"
                 exit 1
             fi
-
+        fi
             # Create plugintype folder if it doesn't exist
-            plugintype=$(echo "$name" | cut -d'_' -f1)
-            [ -d "$moodledir"/"$plugintype" ] || mkdir "$moodledir"/"$plugintype"
+        plugintype=$(echo "$name" | cut -d'_' -f1)
+        [ -d "$moodledir"/"$plugintype" ] || mkdir "$moodledir"/"$plugintype"
 
+        target_path="$moodledir"/"$plugintype"/$(echo "$name" | cut -d'_' -f2- | cut -d'.' -f1)
+        if [ -d "$target_path" ]; then
+            echo "Plugin $name already installed"
+        else
             # Unzip the plugin
             err=$(bsdtar -xf "$plugindir"/"$name" -C "$moodledir"/"$plugintype" 2>&1)
             if [ $? -ne 0 ]; then
-                echo "Error unzipping $name"
-                echo "$err"
-                rm "$plugindir"/"$name"
-                exit 1
-            fi
+                    echo "Error unzipping $name"
+                    echo "$err"
+                    rm "$plugindir"/"$name"
+                    exit 1
+                fi
 
             chown -R www-data:www-data "$moodledir"/"$plugintype"
 
