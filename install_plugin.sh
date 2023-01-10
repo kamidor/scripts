@@ -48,6 +48,7 @@ main(){
                 rm -rf "${fullpath:?}"
             fi else
                 echo "Successfully installed $name"
+                rm "$plugindir"/"$name"
         fi
     done
 
