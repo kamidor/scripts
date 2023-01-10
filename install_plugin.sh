@@ -38,7 +38,7 @@ main(){
             chown -R www-data:www-data "$moodledir"/"$plugintype"
 
             # Install the Plugin
-            err=$(sudo -u www-data php "$moodledir"/admin/cli/upgrade.php --non-interactive 2>&1)
+            err=$(sudo -u www-data php "$moodledir"/admin/cli/upgrade.php --non-interactive --lang=en 2>&1)
             if [ $? -ne 0 ]; then
                 echo "Error installing $name"
                 echo "$err"
