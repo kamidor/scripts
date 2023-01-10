@@ -68,7 +68,7 @@ LOGGER="$project_path"/scripts/logger.pl
 LOGFILE="$project_path"/logs/install_plugin.log
 config="$project_path"/config.yml
 runs=1
-runs=$2
+runs+=$2
 # Run the script 5 times to try to resolve dependencies
 [ "$runs" -lt 5 ] || {
     echo "Dependencies check failed. Please install the dependencies manually."
