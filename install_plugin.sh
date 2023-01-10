@@ -43,10 +43,15 @@ main(){
                 echo "Error installing $name"
                 echo "$err"
                 rm "$plugindir"/"$name"
-                exit 1
+
+                dep_check=$(echo "$err" | grep -q "Dependencies check failed")
             fi
         fi
     done
+    [ -n "$dep_check" ] && {
+        echo "Dependencies check failed. Trying to run the script again, maybe dependencies are installed now."
+        $0 "$moodledir"
+    }
 }
 
 # CD to the directory where the script is to make sure we are in the right directory
