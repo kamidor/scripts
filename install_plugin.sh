@@ -83,5 +83,4 @@ plugindir="$project_path"/src/plugins
 
 moodledir=$1
 
-main
-# main 2>&1 >> $LOGGER $LOGFILE
+main 2>&1 >> $LOGGER $LOGFILE
