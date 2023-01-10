@@ -39,28 +39,27 @@ main(){
 
             # Install the Plugin
             err=$(sudo -u www-data php "$moodledir"/admin/cli/upgrade.php --non-interactive --lang=en 2>&1)
-            if [ $? -ne 0 ]; then
+            if [ $? ]; then
                 echo "Error installing $name"
                 echo "$err"
                 rm "$plugindir"/"$name"
-
                 pluginname=$(echo "$err" | grep -oP '(?<=failed for ).*' | cut -d'_' -f 2-)
                 fullpath=$moodledir/$plugintype/$pluginname
                 rm -rf "${fullpath:?}"
-                dep_check=$(echo "$err" | grep -q "Dependencies check failed")
-            fi
+            fi else
+                echo "Successfully installed $name"
         fi
     done
-    [ "$dep_check" -ne 0 ] || {
-        echo "$dep_check"
-        echo "Dependencies check failed. Trying to run the script again, maybe dependencies are installed now."
-        $0 "$moodledir" $runs
-    }
+
 }
 
 # CD to the directory where the script is to make sure we are in the right directory
 if [[ $BASH_SOURCE = */* ]]; then
     cd -- "${BASH_SOURCE%/*}/" || exit
+fi
+
+if (( int1 < int2 )); then
+    echo "lesser"
 fi
 
 
