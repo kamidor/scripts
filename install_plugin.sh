@@ -44,13 +44,15 @@ main(){
                 echo "$err"
                 rm "$plugindir"/"$name"
 
+                fullpath=$("$moodledir"/"$plugintype"/"$(echo "$err" | grep -oP '(?<=failed for ).*' | cut -d'_' -f 2-)")
+                rm -rf "${fullpath:?}"
                 dep_check=$(echo "$err" | grep -q "Dependencies check failed")
             fi
         fi
     done
     [ -n "$dep_check" ] && {
         echo "Dependencies check failed. Trying to run the script again, maybe dependencies are installed now."
-        $0 "$moodledir"
+        $0 "$moodledir" $runs
     }
 }
 
@@ -59,10 +61,18 @@ if [[ $BASH_SOURCE = */* ]]; then
     cd -- "${BASH_SOURCE%/*}/" || exit
 fi
 
+
 project_path=$(cd ..; pwd -P)
 LOGGER="$project_path"/scripts/logger.pl
 LOGFILE="$project_path"/logs/install_plugin.log
 config="$project_path"/config.yml
+
+runs=$2
+# Run the script 5 times to try to resolve dependencies
+[ $runs -lt 5 ] || {
+    echo "Dependencies check failed. Please install the dependencies manually."
+    exit 1
+}
 
 # Create log dir and file if they don't exist
 [ -d "$project_path"/logs ] || mkdir "$project_path"/logs
