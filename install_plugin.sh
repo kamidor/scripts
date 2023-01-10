@@ -44,7 +44,8 @@ main(){
                 echo "$err"
                 rm "$plugindir"/"$name"
 
-                fullpath=$("$moodledir"/"$plugintype"/"$(echo "$err" | grep -oP '(?<=failed for ).*' | cut -d'_' -f 2-)")
+                pluginname=$(echo "$err" | grep -oP '(?<=failed for ).*' | cut -d'_' -f 2-)
+                fullpath=$moodledir/$plugintype/$pluginname
                 rm -rf "${fullpath:?}"
                 dep_check=$(echo "$err" | grep -q "Dependencies check failed")
             fi
@@ -66,10 +67,10 @@ project_path=$(cd ..; pwd -P)
 LOGGER="$project_path"/scripts/logger.pl
 LOGFILE="$project_path"/logs/install_plugin.log
 config="$project_path"/config.yml
-
+runs=1
 runs=$2
 # Run the script 5 times to try to resolve dependencies
-[ $runs -lt 5 ] || {
+[ "$runs" -lt 5 ] || {
     echo "Dependencies check failed. Please install the dependencies manually."
     exit 1
 }
